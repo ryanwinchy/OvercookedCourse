@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  inputManager: {fileID: 0}
+  inputManager: {fileID: 794827888}
 --- !u!4 &380147060
 Transform:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class InputManager : MonoBehaviour
     PlayerInputActions playerInputActions;
     private void Awake()
     {
-        PlayerInputActions playerInputActions = new PlayerInputActions();
+        playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
     }
 
