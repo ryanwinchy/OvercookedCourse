@@ -14,8 +14,8 @@ public class ContainerCounter : BaseCounter
 
         if (!player.HasKitchenObject())      //if player not carrying anything, give object on this counter.
         {
-            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
-            kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);               //Sets the tomato's counter to this counter.
+            KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);        //Static function on kitchen object class. Spawn new tomato, pass in what to spawn and the parent (this).
+
 
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);      //Fire event.
 

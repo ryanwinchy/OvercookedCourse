@@ -38,6 +38,13 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private void Start()
     {
         inputManager.OnInteractPressed += InputManager_OnInteractPressed;        //Listen for interact button press.
+        inputManager.OnInteractAlternatePressed += InputManager_OnInteractAlternatePressed;
+    }
+
+    private void InputManager_OnInteractAlternatePressed(object sender, EventArgs e)
+    {
+        if (selectedCounter != null)
+            selectedCounter.InteractAlternate(this);
     }
 
     private void InputManager_OnInteractPressed(object sender, EventArgs e)
@@ -104,14 +111,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         {
             //attempt only x movement.
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;     //Normalized so dont get the speed issue, makes the input always 1.
-            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+            canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
 
             if (canMove)                  //Can move on X only.
                 moveDir = moveDirX;
             else                        //Cannot move on X only. Check Z only movement.
             {
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+                canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
 
                 if (canMove)                //Can move Z only.
                     moveDir = moveDirZ;

@@ -33,6 +33,21 @@ public class KitchenObject : MonoBehaviour        //This is the item, like tomat
     }
 
 
+    public void DestroySelf()             //Like when cutting it.
+    {
+        kitchenObjectParent.ClearKitchenObject();
+        Destroy(gameObject);
+    }
+
+
+    public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent)    //Spawn a kitchen object. This belongs to the class itself, not an instance. Weird, I would not put here.
+    {
+        Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
+        KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+        kitchenObject.SetKitchenObjectParent(kitchenObjectParent);               //Sets the tomato's counter to this counter or player.
+
+        return kitchenObject;
+    }
 
 
 

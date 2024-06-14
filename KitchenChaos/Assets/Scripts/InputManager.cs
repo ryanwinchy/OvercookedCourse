@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
 {
 
     public event EventHandler OnInteractPressed;
+    public event EventHandler OnInteractAlternatePressed;
 
     PlayerInputActions playerInputActions;
     private void Awake()
@@ -16,11 +17,17 @@ public class InputManager : MonoBehaviour
         playerInputActions.Player.Enable();
 
         playerInputActions.Player.Interact.performed += Interact_performed;      //Because interact is a button, it is an event, not continuous checks, way more efficient. Subscribe to event.
+        playerInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
     }
 
     private void Interact_performed(InputAction.CallbackContext obj)
     {
         OnInteractPressed?.Invoke(this, EventArgs.Empty);      //Fire event when interact pressed.   Invoke ? means only fire if there are listeners.
+    }
+
+    private void InteractAlternate_performed(InputAction.CallbackContext obj)
+    {
+        OnInteractAlternatePressed?.Invoke(this, EventArgs.Empty);      //Fire event when interact pressed.   Invoke ? means only fire if there are listeners.
     }
 
     public Vector2 GetMovementVector()
