@@ -15,7 +15,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent           //Becau
 
     public virtual void InteractAlternate(Player player)          //Children to override to provide own code. But here means can call it on base, not on individual children. Only children that have cutting should implement this.. Like cutting counter.
     {
-        Debug.LogError("BaseCounter.InteractAlternate();");
+        
     }
 
     public Transform GetKitchenObjectParentTransform()

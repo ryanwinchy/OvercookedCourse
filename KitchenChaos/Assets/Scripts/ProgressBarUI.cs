@@ -6,18 +6,27 @@ using System;
 
 public class ProgressBarUI : MonoBehaviour
 {
-    [SerializeField] CuttingCounter cuttingCounter;
+    [SerializeField] GameObject iHasProgressGameObject;
     [SerializeField] Image barImage;
+
+    IHasProgress iHasProgress;
 
     private void Start()
     {
-        cuttingCounter.OnCuttingProgressChanged += CuttingCounter_OnCuttingProgressChanged;
+        iHasProgress = iHasProgressGameObject.GetComponent<IHasProgress>();
+
+        if (iHasProgress == null )
+        {
+            Debug.LogError("Game Object " + iHasProgressGameObject + " does not have a component that implements IHasProgress");
+        }
+
+        iHasProgress.OnProgressChanged += IHasProgress_OnCuttingProgressChanged;
 
         barImage.fillAmount = 0;
         Hide();
     }
 
-    private void CuttingCounter_OnCuttingProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs e)
+    private void IHasProgress_OnCuttingProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs e)
     {
         barImage.fillAmount = e.progressNormalized;
 

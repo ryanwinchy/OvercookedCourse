@@ -1,15 +1,10 @@
 using System;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter , IHasProgress
 {
 
-    public event EventHandler<OnProgressChangedEventArgs> OnCuttingProgressChanged;
-    public class OnProgressChangedEventArgs : EventArgs
-    {
-        public float progressNormalized;                //as progress bars use float not int. So convert.
-    }
-
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;          //Getting EventArgs from interface.
     public event EventHandler OnCut;
 
     [SerializeField] CuttingRecipeSO[] cuttingRecipeSOArray;
@@ -27,7 +22,7 @@ public class CuttingCounter : BaseCounter
                     cuttingProgress = 0;     //When first placed on chopping counter.
 
                     CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(KitchenObject.GetKitchenObjectSO());
-                    OnCuttingProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax });    //So progress is a float, we have to cast one as a float.
+                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax });    //So progress is a float, we have to cast one as a float.
                 }
             }
 
@@ -36,7 +31,14 @@ public class CuttingCounter : BaseCounter
         {
             if (player.HasKitchenObject())        //Player is carrying something.
             {
+                if (player.KitchenObject.TryGetPlate(out PlateKitchenObject plateKitchenObject))     //Player is holding plate.
+                {
+                    if (plateKitchenObject.TryAddIngredient(KitchenObject.GetKitchenObjectSO()))    //Add to plate what was on this counter.
+                    {
+                        KitchenObject.DestroySelf();     //Destroy what was on counter.
+                    }
 
+                }
             }
             else          //Player carrying nothing.
             {
@@ -56,7 +58,7 @@ public class CuttingCounter : BaseCounter
             OnCut?.Invoke(this, EventArgs.Empty);      //Fire cut event for visual animation.
 
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(KitchenObject.GetKitchenObjectSO());
-            OnCuttingProgressChanged?.Invoke(this, new OnProgressChangedEventArgs { progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax });    //So progress is a float, we have to cast one as a float.
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax });    //So progress is a float, we have to cast one as a float.
 
 
             if (cuttingProgress >= cuttingRecipeSO.cuttingProgressMax)       //When fully cut, spawn cut object.

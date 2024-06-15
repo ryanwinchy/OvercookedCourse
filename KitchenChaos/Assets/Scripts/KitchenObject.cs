@@ -40,6 +40,22 @@ public class KitchenObject : MonoBehaviour        //This is the item, like tomat
     }
 
 
+    public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)     //Out means it is not a copy of the param, but the real variable directly edited.
+    {
+        if (this is PlateKitchenObject)                       //If its a plate save as plate.
+        {
+            plateKitchenObject = this as PlateKitchenObject;
+            return true;
+        }
+        else
+        {
+            plateKitchenObject = null;
+            return false;
+        }
+    }
+
+
+
     public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent)    //Spawn a kitchen object. This belongs to the class itself, not an instance. Weird, I would not put here.
     {
         Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
