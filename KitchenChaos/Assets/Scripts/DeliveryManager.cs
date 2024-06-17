@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,10 +7,12 @@ using UnityEngine;
 public class DeliveryManager : MonoBehaviour
 {
 
+    public event EventHandler OnRecipeSpawned;                 //Events for UI.
+    public event EventHandler OnRecipeCompleted;
     public static DeliveryManager Instance {  get; private set; }
 
     [SerializeField] RecipeListSO recipeListSO;         //Bit of an intermediary for learning. Instead of making a new SO for the list of recipes, we could have just had a list of the recipes. THE BENEFIT of this approach is if multiple scripts need the list of recipes, a SO means you dont dupe all the references and can easily add new recipes in only one place.
-    List<RecipeSO> waitingRecipeSOList;        //List of recipes customers are waiting for.
+    public List<RecipeSO> WaitingRecipeSOList { get; private set; }        //List of recipes customers are waiting for.
 
     float spawnRecipeTimer;
     float spawnRecipeTimerMax = 4f;
@@ -22,7 +25,7 @@ public class DeliveryManager : MonoBehaviour
         Instance = this;
 
 
-        waitingRecipeSOList = new List<RecipeSO>();
+        WaitingRecipeSOList = new List<RecipeSO>();
     }
     private void Update()
     {
@@ -32,11 +35,12 @@ public class DeliveryManager : MonoBehaviour
         {
             spawnRecipeTimer = spawnRecipeTimerMax;
 
-            if (waitingRecipeSOList.Count < waitingRecipesMax)
+            if (WaitingRecipeSOList.Count < waitingRecipesMax)
             {
-                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[Random.Range(0, recipeListSO.recipeSOList.Count)];   //Random recipe and add to list.
-                Debug.Log(waitingRecipeSO.recipeName);
-                waitingRecipeSOList.Add(waitingRecipeSO);
+                RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];   //Random recipe and add to list.
+                WaitingRecipeSOList.Add(waitingRecipeSO);
+
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);       //Fire event.
             }
 
         }
@@ -44,9 +48,9 @@ public class DeliveryManager : MonoBehaviour
 
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject)     //Receive plate.
     {
-        for (int i = 0; i < waitingRecipeSOList.Count; i++)
+        for (int i = 0; i < WaitingRecipeSOList.Count; i++)
         {
-            RecipeSO waitingRecipeSO = waitingRecipeSOList[i];
+            RecipeSO waitingRecipeSO = WaitingRecipeSOList[i];
 
             if (waitingRecipeSO.kitchenObjectSOList.Count == plateKitchenObject.KitchenObjectSOList.Count)     //Has same number of ingredients.
             {
@@ -70,8 +74,10 @@ public class DeliveryManager : MonoBehaviour
                 }
                 if (plateContentsMatchesRecipe)      //All ingredients found on plate. Player delivered correct recipe.
                 {
-                    Debug.Log("Correct recipe delivered. Well done lil cunt :D");
-                    waitingRecipeSOList.RemoveAt(i);        //Recipe no longer waiting.
+                    WaitingRecipeSOList.RemoveAt(i);        //Recipe no longer waiting.
+
+                    OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+
                     return;                           //So stops these loops once found.
                 }
             }
