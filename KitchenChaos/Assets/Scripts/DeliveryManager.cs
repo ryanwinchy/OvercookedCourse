@@ -21,6 +21,8 @@ public class DeliveryManager : MonoBehaviour
 
     int waitingRecipesMax = 4;
 
+    public int SuccessfulRecipesAmount {  get; private set; }
+
 
     private void Awake()
     {
@@ -76,6 +78,8 @@ public class DeliveryManager : MonoBehaviour
                 }
                 if (plateContentsMatchesRecipe)      //All ingredients found on plate. Player delivered correct recipe.
                 {
+                    SuccessfulRecipesAmount++;
+
                     WaitingRecipeSOList.RemoveAt(i);        //Recipe no longer waiting.
 
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);      // Fire events for UI and sound effects.

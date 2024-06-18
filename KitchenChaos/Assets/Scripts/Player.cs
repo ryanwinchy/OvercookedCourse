@@ -45,12 +45,18 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void InputManager_OnInteractAlternatePressed(object sender, EventArgs e)
     {
+        if (!KitchenGameManager.Instance.IsGamePlaying())     //Can only interact when game is playing.
+            return;
+
         if (selectedCounter != null)
             selectedCounter.InteractAlternate(this);
     }
 
     private void InputManager_OnInteractPressed(object sender, EventArgs e)
     {
+        if (!KitchenGameManager.Instance.IsGamePlaying())     //Can only interact when game is playing.
+            return;
+
         if (selectedCounter != null)
             selectedCounter.Interact(this);
     }
