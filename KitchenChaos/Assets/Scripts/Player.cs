@@ -6,6 +6,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     public static Player Instance { get; private set; }
 
+    public event EventHandler OnPickedUpSomething;
+
     public event EventHandler<OnSelectedCounterChangedEventArs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArs: EventArgs   //One way to send info in the event. This approach good if want to send multiple things.
     {
@@ -149,6 +151,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.KitchenObject = kitchenObject;
+
+        if (kitchenObject != null)       //Did pick something up.
+            OnPickedUpSomething?.Invoke(this, EventArgs.Empty);          //Fire event for sound effect.
     }
 
     public void ClearKitchenObject()

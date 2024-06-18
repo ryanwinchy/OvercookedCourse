@@ -5,7 +5,9 @@ public class CuttingCounter : BaseCounter , IHasProgress
 {
 
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;          //Getting EventArgs from interface.
-    public event EventHandler OnCut;
+    public event EventHandler OnCut;                  //For visuals.
+
+    public static event EventHandler OnAnyCut;             //Static so event belongs to class, not a specific cutting counter instance. This event is for audio, so it doesnt matter which counter it was.
 
     [SerializeField] CuttingRecipeSO[] cuttingRecipeSOArray;
 
@@ -56,6 +58,7 @@ public class CuttingCounter : BaseCounter , IHasProgress
 
             cuttingProgress++;
             OnCut?.Invoke(this, EventArgs.Empty);      //Fire cut event for visual animation.
+            OnAnyCut?.Invoke(this, EventArgs.Empty);      //Fire cut event (on any cutting counter) for sound.
 
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(KitchenObject.GetKitchenObjectSO());
             OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized = (float)cuttingProgress / cuttingRecipeSO.cuttingProgressMax });    //So progress is a float, we have to cast one as a float.

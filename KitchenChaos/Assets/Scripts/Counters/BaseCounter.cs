@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseCounter : MonoBehaviour, IKitchenObjectParent           //Because all counters can hold tomatos.
 {
+
+    public static event EventHandler OnAnyObjectPlacedHere;       //static event so belongs to class not a specific counter. So only have to listen once not to every single counter, more efficient.
+
     [SerializeField] Transform counterTopPoint;
 
 
@@ -24,7 +28,16 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent           //Becau
     }
 
 
-    public void SetKitchenObject(KitchenObject kitchenObject) => this.KitchenObject = kitchenObject;
+    public void SetKitchenObject(KitchenObject kitchenObject)
+    {
+        KitchenObject = kitchenObject;
+
+        if (kitchenObject != null)     //If there was a kitchen object placed.
+        {
+            OnAnyObjectPlacedHere?.Invoke(this, EventArgs.Empty);        //Fire event for sound effect.
+        }
+    }
+
 
     public void ClearKitchenObject() => KitchenObject = null;
 
