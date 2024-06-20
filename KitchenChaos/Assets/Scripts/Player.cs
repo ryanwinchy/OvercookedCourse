@@ -119,14 +119,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         {
             //attempt only x movement.
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;     //Normalized so dont get the speed issue, makes the input always 1.
-            canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+            canMove = (moveDir.x < -0.5f || moveDir.x > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);    //Only considers diagonals if significant x input. This is because with controller joystick it can be like 0.01. So we changed from 0, to 0.5 threshold.
 
             if (canMove)                  //Can move on X only.
                 moveDir = moveDirX;
             else                        //Cannot move on X only. Check Z only movement.
             {
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+                canMove = (moveDir.z < -0.5f || moveDir.z > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
 
                 if (canMove)                //Can move Z only.
                     moveDir = moveDirZ;

@@ -10,7 +10,7 @@ public class InputManager : MonoBehaviour
     public event EventHandler OnInteractAlternatePressed;
     public event EventHandler OnPausePressed;
 
-    public enum Binding { Move_Up, Move_Down, Move_Left, Move_Right, Interact, InteractAlternate, Pause }      //Input key bindings.
+    public enum Binding { Move_Up, Move_Down, Move_Left, Move_Right, Interact, InteractAlternate, Pause, Gamepad_Interact, Gamepad_InteractAlternate, Gamepad_Pause }      //Input key bindings.
 
     PlayerInputActions playerInputActions;
     private void Awake()
@@ -87,6 +87,12 @@ public class InputManager : MonoBehaviour
                 return playerInputActions.Player.InteractAlternate.bindings[0].ToDisplayString();          //Return array of bindings we set up in new input system. We always did index 0.
             case Binding.Pause:
                 return playerInputActions.Player.Pause.bindings[0].ToDisplayString();          //Return array of bindings we set up in new input system. We always did index 0.
+            case Binding.Gamepad_Interact:
+                return playerInputActions.Player.Interact.bindings[1].ToDisplayString();          //Return array of bindings we set up in new input system. We always did index 0.
+            case Binding.Gamepad_InteractAlternate:
+                return playerInputActions.Player.InteractAlternate.bindings[1].ToDisplayString();          //Return array of bindings we set up in new input system. We always did index 0.
+            case Binding.Gamepad_Pause:
+                return playerInputActions.Player.Pause.bindings[1].ToDisplayString();          //Return array of bindings we set up in new input system. We always did index 0.
 
         }
     }
@@ -128,6 +134,18 @@ public class InputManager : MonoBehaviour
             case Binding.Pause:
                 inputAction = playerInputActions.Player.Pause;
                 bindingIndex = 0;
+                break;
+            case Binding.Gamepad_Interact:
+                inputAction = playerInputActions.Player.Interact;
+                bindingIndex = 1;
+                break;
+            case Binding.Gamepad_InteractAlternate:
+                inputAction = playerInputActions.Player.InteractAlternate;
+                bindingIndex = 1;
+                break;
+            case Binding.Gamepad_Pause:
+                inputAction = playerInputActions.Player.Pause;
+                bindingIndex = 1;
                 break;
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -24,6 +25,9 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI interactText;
     [SerializeField] TextMeshProUGUI interactAlternateText;
     [SerializeField] TextMeshProUGUI pauseText;
+    [SerializeField] TextMeshProUGUI gamepadInteractText;
+    [SerializeField] TextMeshProUGUI gamepadInteractAlternateText;
+    [SerializeField] TextMeshProUGUI gamepadPauseText;
 
     [SerializeField] Button moveUpButton;
     [SerializeField] Button moveDownButton;
@@ -32,10 +36,13 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] Button interactButton;
     [SerializeField] Button interactAlternateButton;
     [SerializeField] Button pauseButton;
+    [SerializeField] Button gamepadInteractButton;
+    [SerializeField] Button gamepadInteractAlternateButton;
+    [SerializeField] Button gamepadPauseButton;
 
     [SerializeField] Transform pressToRebindKeyTransform;
 
-
+    Action onCloseButtonAction;
 
 
     private void Awake()
@@ -56,6 +63,7 @@ public class OptionsUI : MonoBehaviour
         closeButton.onClick.AddListener(() =>
         {
             Hide();
+            onCloseButtonAction();        //Shows pause menu again.
         });
 
         moveUpButton.onClick.AddListener(() => { RebindBinding(InputManager.Binding.Move_Up); });
@@ -65,6 +73,9 @@ public class OptionsUI : MonoBehaviour
         interactButton.onClick.AddListener(() => { RebindBinding(InputManager.Binding.Interact); });
         interactAlternateButton.onClick.AddListener(() => { RebindBinding(InputManager.Binding.InteractAlternate); });
         pauseButton.onClick.AddListener(() => { RebindBinding(InputManager.Binding.Pause); });
+        gamepadInteractButton.onClick.AddListener(() => { RebindBinding(InputManager.Binding.Gamepad_Interact); });
+        gamepadInteractAlternateButton.onClick.AddListener(() => { RebindBinding(InputManager.Binding.Gamepad_InteractAlternate); });
+        gamepadPauseButton.onClick.AddListener(() => { RebindBinding(InputManager.Binding.Gamepad_Pause); });
     }
 
     private void Start()
@@ -94,10 +105,22 @@ public class OptionsUI : MonoBehaviour
         interactText.text = InputManager.Instance.GetBindingText(InputManager.Binding.Interact);
         interactAlternateText.text = InputManager.Instance.GetBindingText(InputManager.Binding.InteractAlternate);
         pauseText.text = InputManager.Instance.GetBindingText(InputManager.Binding.Pause);
+        gamepadInteractText.text = InputManager.Instance.GetBindingText(InputManager.Binding.Gamepad_Interact);
+        gamepadInteractAlternateText.text = InputManager.Instance.GetBindingText(InputManager.Binding.Gamepad_InteractAlternate);
+        gamepadPauseText.text = InputManager.Instance.GetBindingText(InputManager.Binding.Gamepad_Pause);
 
     }
 
-    public void Show() => gameObject.SetActive(true);
+    public void Show(Action onCloseButtonAction)
+    {
+        this.onCloseButtonAction = onCloseButtonAction;         //Storing delegate to show pause menu when this is deactivated.
+
+
+        gameObject.SetActive(true);
+
+        soundEffectsButton.Select();         //For controller.
+    }
+
 
     public void Hide() => gameObject.SetActive(false);
 

@@ -23,7 +23,8 @@ public class GamePauseUI : MonoBehaviour
         });
         optionsButton.onClick.AddListener(() =>                 //Lambda function. Same as adding on click event in editor.
         {
-            OptionsUI.Instance.Show();
+            Hide();                                //Hide pause menu when go to options.
+            OptionsUI.Instance.Show(Show);                //Delegates show to options menu, so this can show when options closed.
         });
     }
     private void Start()
@@ -44,6 +45,12 @@ public class GamePauseUI : MonoBehaviour
         Show();
     }
 
-    void Show() => gameObject.SetActive(true);
+    void Show()
+    {
+        gameObject.SetActive(true);
+
+        resumeButton.Select();        //Selected by default, for controller support.
+    }
+
     void Hide() => gameObject.SetActive(false);
 }
