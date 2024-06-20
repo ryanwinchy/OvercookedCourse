@@ -20,6 +20,10 @@ public class MainMenuUI : MonoBehaviour
         {
             Application.Quit();    //Quits game, once game built.
         });
+
+        Time.timeScale = 1f;          //So if you had it paused then restart, it defaults to normal speed (unpauses).
+
+
     }
 
 

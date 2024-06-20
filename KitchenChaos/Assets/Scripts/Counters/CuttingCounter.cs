@@ -9,6 +9,12 @@ public class CuttingCounter : BaseCounter , IHasProgress
 
     public static event EventHandler OnAnyCut;             //Static so event belongs to class, not a specific cutting counter instance. This event is for audio, so it doesnt matter which counter it was.
 
+    new public static void ResetStaticData()    //Clears all listeners. Called from main menu to reset. Have to do this as is static event, belongs to class not instance. 'new' because we want to clear base and this one.
+    {
+        OnAnyCut = null;
+    }
+
+
     [SerializeField] CuttingRecipeSO[] cuttingRecipeSOArray;
 
     int cuttingProgress;

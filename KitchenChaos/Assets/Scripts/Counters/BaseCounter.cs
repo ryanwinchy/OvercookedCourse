@@ -8,6 +8,11 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent           //Becau
 
     public static event EventHandler OnAnyObjectPlacedHere;       //static event so belongs to class not a specific counter. So only have to listen once not to every single counter, more efficient.
 
+    public static void ResetStaticData()    //Clears all listeners. Called from main menu to reset. Have to do this as is static event, belongs to class not instance.
+    {
+        OnAnyObjectPlacedHere = null;
+    }
+
     [SerializeField] Transform counterTopPoint;
 
 
