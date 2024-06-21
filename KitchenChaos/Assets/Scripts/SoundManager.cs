@@ -79,6 +79,16 @@ public class SoundManager : MonoBehaviour
         PlaySound(audioClipRefsSO.footstep, position, volume);
     }
 
+    public void PlayCountdownSound()        //Special function because this is called from PlayerSounds script.
+    {
+        PlaySound(audioClipRefsSO.warning, Vector3.zero);
+    }
+
+    public void PlayWarningSound(Vector3 position)        //Special function because this is called from PlayerSounds script.
+    {
+        PlaySound(audioClipRefsSO.warning, position);
+    }
+
 
     public void ChangeVolume()
     {

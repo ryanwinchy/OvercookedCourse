@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     public event EventHandler OnInteractPressed;
     public event EventHandler OnInteractAlternatePressed;
     public event EventHandler OnPausePressed;
+    public event EventHandler OnBindingRebound;
 
     public enum Binding { Move_Up, Move_Down, Move_Left, Move_Right, Interact, InteractAlternate, Pause, Gamepad_Interact, Gamepad_InteractAlternate, Gamepad_Pause }      //Input key bindings.
 
@@ -158,6 +159,8 @@ public class InputManager : MonoBehaviour
 
             PlayerPrefs.SetString("InputBindings", playerInputActions.SaveBindingOverridesAsJson());        //Easy function to save input remappings between sessions.
             PlayerPrefs.Save();
+
+            OnBindingRebound?.Invoke(this, EventArgs.Empty);        //so tutorial menu updates them.
         })
             .Start();          //Start starts rebinding process.
     }

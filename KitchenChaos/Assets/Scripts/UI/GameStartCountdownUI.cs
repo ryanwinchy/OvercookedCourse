@@ -8,6 +8,15 @@ public class GameStartCountdownUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI countdownText;
 
+    Animator animator;
+
+    int previousCountdownNumber;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     private void Start()
     {
         KitchenGameManager.Instance.OnStateChanged += KitchenGameManager_OnStateChanged;
@@ -17,7 +26,15 @@ public class GameStartCountdownUI : MonoBehaviour
 
     private void Update()
     {
-        countdownText.text = Mathf.Ceil(KitchenGameManager.Instance.GetCountdownToStartTimer()).ToString();         //mathf.ceil makes sure it only shows the whole number, no decimals.
+        int countdownNumber = Mathf.CeilToInt(KitchenGameManager.Instance.GetCountdownToStartTimer());            //mathf.ceil makes sure it only shows the whole number, no decimals.
+        countdownText.text = countdownNumber.ToString();         
+
+        if (previousCountdownNumber != countdownNumber)
+        {
+            previousCountdownNumber = countdownNumber;       //So plays little spin anim when new number on countdown.
+            animator.SetTrigger("NumberPopup");
+            SoundManager.Instance.PlayCountdownSound();
+        }
     }
 
     private void KitchenGameManager_OnStateChanged(object sender, System.EventArgs e)
